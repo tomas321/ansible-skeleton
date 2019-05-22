@@ -1,0 +1,30 @@
+--- # POST saved objects to kibana from file or explicitly
+
+- hosts: localhost
+  vars:
+    kibana_host: "http://localhost"
+    kibana_port: 5601
+    kibana_path: "api/saved_objects/_bulk_create"
+    file: "/tmp/saved_objects.json"
+    explicit_body:
+      - id: "1q2w3e4r5t6y7"
+        type: "index-pattern"
+        attributes:
+          timeFieldName: "@timestamp"
+          title: "test*"
+    file_contents: "{% if file is defined -%}{{ lookup('file', file) }}{% else %}{{ [] }}{%- endif %}"
+  tasks:
+    - name: post saved objects to kibana
+      when:
+        - explicit_body is defined or file_contents | length | bool
+      uri:
+        method: POST
+        url: "{{ kibana_host }}:{{ kibana_port }}/{{ kibana_path }}"
+        return_content: true
+        body: "{{ (explicit_body + file_contents) | to_json }}"
+        body_format: 'json'
+        headers:
+          kbn-xsrf: true
+          Content-Type: 'application/json'
+        use_proxy: "{{ kibana_port in [80, 443] }}"
+
