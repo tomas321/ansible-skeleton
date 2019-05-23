@@ -1,0 +1,25 @@
+--- # GET saved objects from kibana
+
+- hosts: kibana-local
+  vars:
+    kibana_host: "http://localhost"
+    kibana_port: 5601
+    kibana_path: "api/saved_objects/_find?type=visualization&type=search&type=index-pattern&type=dashboard&per_page=100&page=1"
+    file: "/tmp/objects.json"
+  tasks:
+    - name: get saved objects from kibana
+      uri:
+        method: GET
+        url: "{{ kibana_host }}:{{ kibana_port }}/{{ kibana_path }}"
+        return_content: true
+        headers:
+          kbn-xsrf: true
+          Content-Type: 'application/json'
+        use_proxy: "{{ kibana_port in [80, 443] }}"
+      register: objects
+    
+    - name: save return objects to file
+      delegate_to: localhost
+      copy:
+        content: "{{ objects['json']['saved_objects'] }}"
+        dest: "{{ file }}"
