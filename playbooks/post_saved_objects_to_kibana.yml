@@ -13,8 +13,8 @@
           timeFieldName: "@timestamp"
           title: "test*"
     file_contents: "{% if file is defined -%}{{ lookup('file', file) }}{% else %}{{ [] }}{%- endif %}"
-    tasks:
-      - name: post saved objects to kibana
+  tasks:
+    - name: post saved objects to kibana
       when:
         - explicit_body is defined or file_contents | length | bool
       uri:
