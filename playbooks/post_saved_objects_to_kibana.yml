@@ -13,14 +13,13 @@
           timeFieldName: "@timestamp"
           title: "test*"
     file_contents: "{% if file is defined -%}{{ lookup('file', file) }}{% else %}{{ [] }}{%- endif %}"
-  tasks:
-    - name: post saved objects to kibana
+    tasks:
+      - name: post saved objects to kibana
       when:
         - explicit_body is defined or file_contents | length | bool
       uri:
         method: POST
         url: "{{ kibana_host }}:{{ kibana_port }}/{{ kibana_path }}"
-        return_content: true
         body: "{{ (explicit_body + file_contents) | to_json }}"
         body_format: 'json'
         headers:
