@@ -1,0 +1,3 @@
+[submodule "roles/kiobi"]
+	path = roles/kiobi
+	url = git@github.com:tomas321/ansible-role-kiobi.git
