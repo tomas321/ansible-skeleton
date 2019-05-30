@@ -1,3 +1,6 @@
 [submodule "roles/kiobi"]
 	path = roles/kiobi
 	url = git@github.com:tomas321/ansible-role-kiobi.git
+[submodule "roles/elasticsearch-reindex"]
+	path = roles/elasticsearch-reindex
+	url = git@github.com:tomas321/ansible-role-elasticsearch-reindex.git
