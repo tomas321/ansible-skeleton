@@ -4,5 +4,8 @@ misc/*
 vault*
 
 inventory/
+local_hosts
+host_vars/
+group_vars/
 playbooks/tomas/
 roles/other
